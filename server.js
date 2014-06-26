@@ -35,11 +35,16 @@ module.exports = function(dir, args){
       var host = req.headers.host;
       console.log(host, req.url)      
       if(/^www/.test(host)){
+        console.log('www found')
         res.writeHead(307, {'Location': 'http://' + host.replace(/^www\./, '') + req.url})
         res.end()
         return
       }
-
+      if(req.url === '/') {
+        res.writeHead(302, {'Location': 'http://' + host + req.url + 'index.html'})
+        res.end()
+        return
+      }
       var subdomain = host.split('.')[0]
 
       console.log(subdomain)
