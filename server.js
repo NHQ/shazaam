@@ -5,6 +5,7 @@ var http = require('http')
 ,   path = require('path')
 ,   fs = require('fs')
 ,   openSesame = require('sesame-stream')
+,   url = require('url')
 ;
 
 module.exports = function(dir, args){
@@ -33,7 +34,6 @@ module.exports = function(dir, args){
   var server = http.createServer(function(req, res){
       
       var host = req.headers.host;
-      console.log(host, req.url)      
       if(/^www/.test(host)){
         console.log('www found')
         res.writeHead(307, {'Location': 'http://' + host.replace(/^www\./, '') + req.url})
@@ -46,10 +46,9 @@ module.exports = function(dir, args){
         return
       }
       var subdomain = host.split('.')[0]
-
-      console.log(subdomain)
-
-      subdirs['/' + subdomain].static(req, res)
+      var _url = url.parse(req.url)
+      subdirs['/' + _url.pathname.split('/')[1]].static(req, res)
+      //subdirs['/' + subdomain].static(req, res)
     
       function next(){
         res.writeHead(200, {'content-type' : 'text/html'})
