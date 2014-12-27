@@ -47,8 +47,7 @@ module.exports = function(dir, args){
       }
       var subdomain = host.split('.')[0]
       var _url = url.parse(req.url)
-      subdirs['/' + _url.pathname.split('/')[1]].static(req, res)
-      //subdirs['/' + subdomain].static(req, res)
+	subdirs['/' + subdomain].static(req, res, next)
     
       function next(){
         res.writeHead(200, {'content-type' : 'text/html'})
@@ -59,7 +58,7 @@ module.exports = function(dir, args){
 
   server.on('upgrade', openSesame)
 
-  answer(server, 11001)
+  answer(server, 80)
 
   server.on('error', function(e){
   });
